@@ -11,6 +11,67 @@ I also wrote stored procedures, user-defined functions, and several analytical S
 Overall, the project demonstrates end-to-end experience with real database architecture, data modeling, normalization, data cleaning, transformation logic, indexing strategy, and SQL development which has helped me refine all of the newly learned skills directly applicable to data engineering and data science workflows.
 
 
+## Project Workflow: End-to-End Steps:
+
+1. Dataset Selection & Requirements Review
+* Selected a dataset of 100 horror movies.
+* Reviewed the project requirements for building conceptual → logical → physical models, loading data, and producing analytical SQL queries.
+
+2. Conceptual Model (High-Level ERD)
+* Identified core entities: Movie, Genre, Language, Collection.
+* Defined main relationships, including a many-to-many relationship between movies and genres.
+
+3. Logical Model (Normalized Schema)
+* Converted entities into 3NF relational tables.
+* Added surrogate primary keys (Movie_ID, Genre_ID, Language_ID, Collection_ID).
+* Introduced a junction table MOVIE_GENRE to model many-to-many relationships.
+* Applied standardized naming conventions for tables and attributes.
+
+4. Physical Model (MySQL Implementation)
+* Assigned appropriate data types for every field (INT, TEXT, DATE, DECIMAL, etc.).
+* Created tables, constraints, foreign keys, and indexes in MySQL Workbench.
+* Added audit columns (Created_Date, Modified_Date) across all tables.
+* Exported the complete physical EER diagram.
+
+5. Data Import into Staging Table
+* Loaded the raw CSV into a staging table (BULK_MOVIES) using MySQL Workbench.
+* Cleaned encoding issues, removed invalid characters, and standardized fields (e.g., poster/backdrop paths).
+
+6. Load Lookup Tables
+* Populated reference tables using DISTINCT values:
+* LANGUAGE from original_language
+* COLLECTIONS from collection & collection_name
+* GENRE from multi-genre lists
+* Added foreign key mapping columns (Language_ID, Collection_ID) to BULK_MOVIES.
+
+7. Data Cleaning & Transformation
+* Converted comma-separated genre lists into structured arrays.
+* Used JSON parsing functions to normalize multi-genre entries.
+* Ensured NULL handling for missing collection values.
+* Updated staging rows to match lookup table IDs.
+
+8. Load the MOVIE Table
+* Inserted all 100 movie records into the normalized MOVIE table.
+* Included all cleaned fields: titles, runtime, popularity, vote counts, budget, revenue, adult flag, and paths.
+* Applied Language_ID and Collection_ID foreign keys.
+
+9. Load MOVIE_GENRE (Many-to-Many Table)
+* Used JSON-based splitting to extract 1–4 genres per film.
+* Inserted one row per (Movie_ID, Genre_ID) combination.
+* Ensured full normalization of all genre relationships.
+
+10. Create Reporting View
+* Built the view vw_All_Movies to combine normalized tables into a single analytical dataset.
+* Joined MOVIE, LANGUAGE, COLLECTIONS, GENRE, and MOVIE_GENRE for easy querying.
+
+11. Write Analytical SQL Queries
+* Developed five meaningful insights, including:
+* Highest-grossing movies
+* Runtime analysis by genre
+* Language distribution
+* Top-performing collections
+* “Hidden gem” films (high rating, low popularity)
+
 ### Creating this project demonstrates the skills I have learned thus far:
 
 **Data Engineering Fundamentals**
